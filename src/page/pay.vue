@@ -29,15 +29,15 @@
       <div class="key" @click.stop.prevent="num('4')">4</div>
       <div class="key" @click.stop.prevent="num('5')">5</div>
       <div class="key" @click.stop.prevent="num('6')">6</div>
-      <div class="key pay confirm-empty" :class="{'active': total_amount !== ''}"></div>
+      <div class="key pay confirm-empty" :class="{'active': total_amount !== ''}" @click.stop.prevent="goPay"></div>
       <div class="key" @click.stop.prevent="num('7')">7</div>
       <div class="key" @click.stop.prevent="num('8')">8</div>
       <div class="key" @click.stop.prevent="num('9')">9</div>
-      <div class="key pay confirm-pay" :class="{'active': total_amount !== ''}"><span>确认</span><span>付款</span></div>
+      <div class="key pay confirm-pay" :class="{'active': total_amount !== ''}" @click.stop.prevent="goPay"><span>确认</span><span>付款</span></div>
       <div class="key" @click.stop.prevent="decimal">.</div>
       <div class="key" @click.stop.prevent="zero">0</div>
       <div class="key" @click.stop.prevent="doubleZero">00</div>
-      <div class="key pay confirm-empty" :class="{'active': total_amount !== ''}"></div>
+      <div class="key pay confirm-empty" :class="{'active': total_amount !== ''}" @click.stop.prevent="goPay"></div>
     </div>
     <div class="mask" v-show="visible" @click.stop.prevent="visible = false"></div>
     <transition name="slide">
@@ -325,6 +325,9 @@ export default {
       this.visible = false
       this.checkedIndex = -1
       return true
+    },
+    goPay () {
+      this.$router.push({path: 'pay_success/12121212122'})
     },
     // 初始化滚动
     initScroll () {
