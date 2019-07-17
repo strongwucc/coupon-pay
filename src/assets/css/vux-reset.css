@@ -1,0 +1,12 @@
+.vux-loading .weui-toast {
+  width: 100px !important;
+  min-height: 80px !important;
+  /*top: 300px;*/
+  top: 50%;
+  margin-top: -50px;
+}
+
+.vux-loading .weui-toast .weui-icon_toast {
+  width: 20px !important;
+  height: 20px !important;
+}
