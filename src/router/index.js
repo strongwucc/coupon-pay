@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 const Pay = r => require.ensure([], () => r(require('@/page/pay')), 'pay') // 付款
+const Waiting = r => require.ensure([], () => r(require('@/page/waiting')), 'waiting') // 付款结果查询
 const PaySuccess = r => require.ensure([], () => r(require('@/page/pay_success')), 'pay_success') // 付款成功
 const PayInvalid = r => require.ensure([], () => r(require('@/page/pay_invalid')), 'pay_invalid') // 付款无效
 const PayFail = r => require.ensure([], () => r(require('@/page/pay_fail')), 'pay_fail') // 付款失败
@@ -12,18 +13,28 @@ Vue.use(Router)
 export default new Router({
   mode: 'hash',
   routes: [
-    {
-      path: '/',
-      redirect: '/pay'
-    },
+    // {
+    //   path: '/',
+    //   redirect: '/pay'
+    // },
 
     {
-      path: '/pay',
+      path: '/pay/:storeBn',
       name: 'pay',
       component: Pay,
       meta: {
         auth: 0,
         title: '付款'
+      }
+    },
+
+    {
+      path: '/waiting/:orderBn',
+      name: 'waiting',
+      component: Waiting,
+      meta: {
+        auth: 0,
+        title: '查询中'
       }
     },
 

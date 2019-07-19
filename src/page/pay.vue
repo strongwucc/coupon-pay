@@ -2,7 +2,7 @@
   <div class="pay-page">
     <div class="store">
       <img src="../assets/img/pay/icon_dianpu@2x.png"/>
-      <span>星巴克(合川路店)</span>
+      <span>{{store_name}}</span>
     </div>
     <div class="money-title">付款金额</div>
     <div class="money">
@@ -65,7 +65,12 @@
                 </div>
                 <div class="coupon_text">
                   <p class="coupon-name">{{coupon.title|longStrFormat(7)}}</p>
-                  <p class="use_merchant">{{coupon.merchant|longStrFormat(9)}}</p>
+                  <p class="use_merchant">
+                    <template v-if="coupon.merchants.length > 0">
+                      {{coupon.merchants[0].mer_name|longStrFormat(9)}}
+                    </template>
+                    <template v-else>适用所有商户</template>
+                  </p>
                   <p class="expired-time">{{coupon.begin_date_time}}-{{coupon.end_date_time}}</p>
                 </div>
               </div>
@@ -89,100 +94,104 @@
 import BScroll from 'better-scroll'
 import { getRect } from '../../src/assets/js/dom'
 import { LoadMore } from 'vux'
+import { getBaseUrl } from '../config/env'
 export default {
   name: 'pay',
   components: {LoadMore},
   inject: ['reload'], // 引入方法
   data () {
     return {
+      store_bn: '',
+      store_name: '',
+      open_id: '',
       total_amount: '',
       discount_amount: '',
       visible: false,
       coupons: [
-        {
-          qrcode: '12121212121212',
-          card_type: 'DISCOUNT',
-          discount: 10,
-          least_cost: 0,
-          reduce_cost: 0,
-          title: '9折券',
-          merchant: '星巴克',
-          begin_date_time: '2018.05.06',
-          end_date_time: '2019.05.06',
-          dated: 0,
-          use_status: '0',
-          left_days: 4
-        },
-        {
-          qrcode: '12121212121212',
-          card_type: 'CASH',
-          discount: 0,
-          least_cost: 0,
-          reduce_cost: 10,
-          title: '10元代金券',
-          merchant: '星巴克',
-          begin_date_time: '2018.05.06',
-          end_date_time: '2019.05.06',
-          dated: 0,
-          use_status: '0',
-          left_days: 4
-        },
-        {
-          qrcode: '12121212121212',
-          card_type: 'FULL_REDUCTION',
-          discount: 0,
-          least_cost: 100,
-          reduce_cost: 10,
-          title: '10元满减券',
-          merchant: '星巴克',
-          begin_date_time: '2018.05.06',
-          end_date_time: '2019.05.06',
-          dated: 0,
-          use_status: '0',
-          left_days: 4
-        },
-        {
-          qrcode: '12121212121212',
-          card_type: 'DISCOUNT',
-          discount: 10,
-          least_cost: 0,
-          reduce_cost: 0,
-          title: '9折券',
-          merchant: '星巴克',
-          begin_date_time: '2018.05.06',
-          end_date_time: '2019.05.06',
-          dated: 0,
-          use_status: '0',
-          left_days: 4
-        },
-        {
-          qrcode: '12121212121212',
-          card_type: 'CASH',
-          discount: 0,
-          least_cost: 0,
-          reduce_cost: 10,
-          title: '10元代金券',
-          merchant: '星巴克',
-          begin_date_time: '2018.05.06',
-          end_date_time: '2019.05.06',
-          dated: 0,
-          use_status: '0',
-          left_days: 4
-        },
-        {
-          qrcode: '12121212121212',
-          card_type: 'FULL_REDUCTION',
-          discount: 0,
-          least_cost: 100,
-          reduce_cost: 10,
-          title: '10元满减券',
-          merchant: '星巴克',
-          begin_date_time: '2018.05.06',
-          end_date_time: '2019.05.06',
-          dated: 0,
-          use_status: '0',
-          left_days: 4
-        }
+        // {
+        //   qrcode: '12121212121212',
+        //   card_type: 'DISCOUNT',
+        //   discount: 10,
+        //   least_cost: 0,
+        //   reduce_cost: 0,
+        //   title: '9折券',
+        //   merchant: '星巴克',
+        //   begin_date_time: '2018.05.06',
+        //   end_date_time: '2019.05.06',
+        //   dated: 0,
+        //   use_status: '0',
+        //   left_days: 4
+        // },
+        // {
+        //   qrcode: '12121212121212',
+        //   card_type: 'CASH',
+        //   discount: 0,
+        //   least_cost: 0,
+        //   reduce_cost: 10,
+        //   title: '10元代金券',
+        //   merchant: '星巴克',
+        //   begin_date_time: '2018.05.06',
+        //   end_date_time: '2019.05.06',
+        //   dated: 0,
+        //   use_status: '0',
+        //   left_days: 4
+        // },
+        // {
+        //   qrcode: '12121212121212',
+        //   card_type: 'FULL_REDUCTION',
+        //   discount: 0,
+        //   least_cost: 100,
+        //   reduce_cost: 10,
+        //   title: '10元满减券',
+        //   merchant: '星巴克',
+        //   begin_date_time: '2018.05.06',
+        //   end_date_time: '2019.05.06',
+        //   dated: 0,
+        //   use_status: '0',
+        //   left_days: 4
+        // },
+        // {
+        //   qrcode: '12121212121212',
+        //   card_type: 'DISCOUNT',
+        //   discount: 10,
+        //   least_cost: 0,
+        //   reduce_cost: 0,
+        //   title: '9折券',
+        //   merchant: '星巴克',
+        //   begin_date_time: '2018.05.06',
+        //   end_date_time: '2019.05.06',
+        //   dated: 0,
+        //   use_status: '0',
+        //   left_days: 4
+        // },
+        // {
+        //   qrcode: '12121212121212',
+        //   card_type: 'CASH',
+        //   discount: 0,
+        //   least_cost: 0,
+        //   reduce_cost: 10,
+        //   title: '10元代金券',
+        //   merchant: '星巴克',
+        //   begin_date_time: '2018.05.06',
+        //   end_date_time: '2019.05.06',
+        //   dated: 0,
+        //   use_status: '0',
+        //   left_days: 4
+        // },
+        // {
+        //   qrcode: '12121212121212',
+        //   card_type: 'FULL_REDUCTION',
+        //   discount: 0,
+        //   least_cost: 100,
+        //   reduce_cost: 10,
+        //   title: '10元满减券',
+        //   merchant: '星巴克',
+        //   begin_date_time: '2018.05.06',
+        //   end_date_time: '2019.05.06',
+        //   dated: 0,
+        //   use_status: '0',
+        //   left_days: 4
+        // }
       ],
       pageLimit: 3,
       currentPage: 0,
@@ -211,12 +220,53 @@ export default {
     }
   },
   created () {
+    if (this.$route.params.storeBn) {
+      this.store_bn = this.$route.params.storeBn
+    }
   },
   mounted () {
+    this.getStoreInfo()
   },
   destroyed () {
   },
   methods: {
+    getStoreInfo () {
+      // 从接口获取
+      this.$http.post(this.API.getStoreInfo, {storeBn: this.store_bn}).then(result => {
+        if (result.return_code === '0000') {
+          if (result.data.openId === '') {
+            // window.location.href = getBaseUrl + 'index.php/openapi/promotion_offapi/authorize?storeBn=' + this.store_bn
+            return false
+          }
+          this.store_name = result.data.storeName
+          this.open_id = result.data.openId
+          this.getCounpon()
+          return true
+        } else {
+          this.$vux.toast.show({
+            type: 'text',
+            text: '<span style="font-size: 14px;padding: 0 10px">门店信息获取失败</span>',
+            position: 'middle'
+          })
+          return false
+        }
+      })
+    },
+    getCounpon () {
+      this.$http.post(this.API.getCounpon, {}).then(result => {
+        if (result.return_code === '0000') {
+          // console.log(result.data.length)
+          this.coupons = result.data
+        } else {
+          this.$vux.toast.show({
+            type: 'text',
+            text: '<span style="font-size: 14px;padding: 0 10px">优惠券获取失败</span>',
+            position: 'middle'
+          })
+          return false
+        }
+      })
+    },
     num (number) {
       if (this.total_amount.length >= 10) {
         return false
@@ -327,7 +377,22 @@ export default {
       return true
     },
     goPay () {
-      this.$router.push({path: 'pay_success/12121212122'})
+      let totalAmount = isNaN(parseFloat(this.total_amount)) ? 0.00 : parseFloat(this.total_amount)
+      let code = this.checkedIndex >= 0 && this.coupons[this.checkedIndex] ? this.coupons[this.checkedIndex].qrcode : ''
+      this.$vux.loading.show({})
+      this.$http.post(this.API.createOrder, {amount: totalAmount, code: code}).then(res => {
+        this.$vux.loading.hide()
+        if (res.return_code === '0000') {
+          window.location.href = res.data.pay_url
+        } else {
+          this.$vux.toast.show({
+            type: 'text',
+            text: '<span style="font-size: 14px;padding: 0 10px">哎呀，付款出错啦！</span>',
+            position: 'middle'
+          })
+          return false
+        }
+      })
     },
     // 初始化滚动
     initScroll () {

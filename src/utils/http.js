@@ -1,80 +1,8 @@
 import axios from 'axios'
-import router from '../router'
 import qs from 'qs'
-import { baseUrl, baseRedirectUrl, appId } from '../config/env'
+import { baseUrl } from '../config/env'
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.headers['Accept'] = 'application/prs.district.v1+json'
 axios.defaults.withCredentials = false
-axios.interceptors.request.use(function (config) {
-  // Do something before request is sent
-  let token = localStorage.getItem('access_token')
-  if (token) {
-    config.headers['Authorization'] = 'Bearer ' + token
-  }
-  return config
-}, function (error) {
-  // Do something with request error
-  // console.log(error)
-  return Promise.reject(error)
-})
-
-function getRefreshToken () {
-  // print('TRYING TO GET TOKEN...')
-  return axios({
-    url: baseUrl + 'authorizations/update',
-    method: 'post'
-  })
-}
-
-axios.interceptors.response.use(function (response) {
-  // Do something with response data
-  // console.log(response)
-  return response
-}, function (error) {
-  if (error.response.status === 401 && error.config && !error.config.__isRetryRequest) {
-    let accessToken = localStorage.getItem('access_token')
-
-    console.log(router.currentRoute)
-    if (!accessToken && router.currentRoute.meta.auth === 1) {
-      let redirect = router.currentRoute.fullPath
-      let redirectUri = baseRedirectUrl + '/wechat.html'
-      let oauthUrl = 'http://wxgw.yklsh.etonepay.com/authorize?etone_id=' + appId + '&redirect_uri=' + encodeURIComponent(redirectUri) + '&scope=snsapi_userinfo&state=' + encodeURIComponent(redirect)
-      window.location.href = oauthUrl
-      return Promise.reject(error)
-    }
-
-    error.config.__isRetryRequest = true
-    return getRefreshToken()
-      .then(function (success) {
-        localStorage.setItem('access_token', success.data.access_token)
-        error.config.__isRetryRequest = true
-        error.config.headers.Authorization = 'Bearer ' + success.data.access_token
-        return axios(error.config)
-      })
-      .catch(function (err) {
-        console.log('Refresh login error: ', err)
-        if (router.currentRoute.meta.auth === 1) {
-          let redirect = router.currentRoute.fullPath
-          let redirectUri = baseRedirectUrl + '/wechat.html'
-          let oauthUrl = 'http://wxgw.yklsh.etonepay.com/authorize?etone_id=' + appId + '&redirect_uri=' + encodeURIComponent(redirectUri) + '&scope=snsapi_userinfo&state=' + encodeURIComponent(redirect)
-          window.location.href = oauthUrl
-        }
-        return Promise.reject(error)
-      })
-  } else {
-    return Promise.reject(error)
-  }
-  // Do something with response error
-  // console.log(error.response)
-  // console.log(router.currentRoute)
-  // console.log(error.config)
-  // if (error.response && error.response.status === 401 && router.currentRoute.meta.auth === 1) {
-  //   let redirect = router.currentRoute.fullPath
-  //   let redirectUri = baseRedirectUrl + '/wechat.html'
-  //   let oauthUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appId + '&redirect_uri=' + encodeURIComponent(redirectUri) + '&response_type=code&scope=snsapi_userinfo&state=' + encodeURIComponent(redirect) + '#wechat_redirect'
-  //   window.location.href = oauthUrl
-  // }
-})
 
 export default class http {
   constructor (store, api) {

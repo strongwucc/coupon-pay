@@ -2,14 +2,14 @@
   <div class="pay-success-page">
     <div class="success-icon"><img src="../assets/img/pay_success/icon_jiaoyi_success@2x.png"/></div>
     <div class="notice">支付成功</div>
-    <div class="payed">￥{{order.payed | formatMoney(2)}}</div>
+    <div class="payed">￥{{order.total_amount - order.discount | formatMoney(2)}}</div>
     <div class="line"></div>
     <div class="tab merchant"><span class="label">收款方</span><span class="txt">{{order.merchant}}</span></div>
     <div class="tab total-amount"><span class="label">订单金额</span><span class="txt">￥{{order.total_amount | formatMoney(2)}}</span></div>
     <div class="tab discount"><span class="label">已使用优惠劵</span><span class="txt">-￥{{order.discount | formatMoney(2)}}</span></div>
     <div class="line"></div>
     <div class="tab order"><span class="label">订单编号</span><span class="txt">{{order.order_id}}</span></div>
-    <div class="tab trans-time"><span class="label">交易时间</span><span class="txt">{{order.trans_time}}</span></div>
+    <div class="tab trans-time"><span class="label">交易时间</span><span class="txt">{{order.trans_time | toDate}}</span></div>
     <div class="close">关闭</div>
   </div>
 </template>
@@ -42,10 +42,22 @@ export default {
     }
   },
   mounted () {
+    this.queryOrder()
   },
   destroyed () {
   },
   methods: {
+    queryOrder () {
+      this.$http.post(this.API.orderQuery, {orderId: this.orderId}).then(result => {
+        if (result.return_code === '0000' && result.data.pay_status === '1') {
+          this.order.order_id = this.orderId
+          this.order.total_amount = result.data.total_amount
+          this.order.discount = result.data.pmt_order
+          this.order.trans_time = result.data.last_modified
+          return true
+        }
+      })
+    }
   }
 }
 </script>

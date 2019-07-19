@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Http from './http'
 import NP from 'number-precision'
-import { uploadUrl } from '../config/env'
+import { getBaseUrl as uploadUrl } from '../config/env'
 // 保留两位有效数字
 Vue.filter('formatMoney', function (value, status) {
   if (value == 'undefined' || value === '' || value == null) return 0

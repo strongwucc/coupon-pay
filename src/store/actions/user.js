@@ -4,7 +4,6 @@
 
 import Http from '../../utils/http'
 import API from '../../utils/api'
-import { baseRedirectUrl, appId } from '../../../src/config/env'
 
 let http = new Http()
 
@@ -20,18 +19,16 @@ export default {
       commit('set_user_login_status', isLogin)
     }
 
+    console.log(router)
+
     // 从接口获取
-    http.post(API.userInfo).then(result => {
+    http.post(API.getStoreInfo).then(result => {
       if (result.status_code === 401) {
-        commit('set_user_bind_status', 0)
         commit('set_user_login_status', 0)
         commit('set_user_info', {})
         isLogin = 0
       }
       if (result.member_id) {
-        let bindStatus = result.bound_phone ? 1 : 0
-        console.log(bindStatus)
-        commit('set_user_bind_status', bindStatus)
         commit('set_user_login_status', 1)
         commit('set_user_info', result)
         isLogin = 1
