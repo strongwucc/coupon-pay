@@ -51,7 +51,7 @@
                   <div class="title">
                     <span class="currency" v-if="coupon.card_type !== 'DISCOUNT'">￥</span>
                     <span class="number">
-                    <template v-if="coupon.card_type === 'DISCOUNT'">{{((100 - coupon.discount) / 10)|formatMoney(0)}}</template>
+                    <template v-if="coupon.card_type === 'DISCOUNT'">{{((100 - coupon.discount) / 10)}}</template>
                     <template v-else>{{coupon.reduce_cost|formatMoney(0)}}</template>
                   </span>
                     <span class="zhe" v-if="coupon.card_type === 'DISCOUNT'">折</span>
