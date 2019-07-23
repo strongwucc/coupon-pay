@@ -47,12 +47,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../coupon-pay/index.html'),
+    index: path.resolve(__dirname, '../sellerpok/coupon-pay/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../coupon-pay'),
+    assetsRoot: path.resolve(__dirname, '../sellerpok/coupon-pay'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/coupon-pay/',
+    assetsPublicPath: '/sellerpok/coupon-pay/',
 
     /**
      * Source Maps

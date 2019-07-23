@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === 'development') {
   // baseUrl = rootUrl + '/api/'
   // baseRedirectUrl = 'http://ceshi6.sdykt.com.cn:1280/business-district'
   appId = 'yt6eb45ebc33750e02'
-  getBaseUrl = 'http://' + window.location.host
+  getBaseUrl = 'http://' + window.location.host + '/sellerpok/'
 }
 
 export {

@@ -235,7 +235,7 @@ export default {
       this.$http.post(this.API.getStoreInfo, {storeBn: this.store_bn}).then(result => {
         if (result.return_code === '0000') {
           if (result.data.openId === '') {
-            // window.location.href = getBaseUrl + 'index.php/openapi/promotion_offapi/authorize?storeBn=' + this.store_bn
+            window.location.href = getBaseUrl + 'index.php/openapi/promotion_offapi/authorize?storeBn=' + this.store_bn
             return false
           }
           this.store_name = result.data.storeName
@@ -380,7 +380,7 @@ export default {
       let totalAmount = isNaN(parseFloat(this.total_amount)) ? 0.00 : parseFloat(this.total_amount)
       let code = this.checkedIndex >= 0 && this.coupons[this.checkedIndex] ? this.coupons[this.checkedIndex].qrcode : ''
       this.$vux.loading.show({})
-      this.$http.post(this.API.createOrder, {amount: totalAmount, code: code}).then(res => {
+      this.$http.post(this.API.createOrder, {amount: totalAmount, code: code, storeBn: this.store_bn}).then(res => {
         this.$vux.loading.hide()
         if (res.return_code === '0000') {
           window.location.href = res.data.pay_url
