@@ -3,7 +3,7 @@
     <div class="fail-icon"><img src="../assets/img/pay_fail/icon_jiaoyi_fail@2x.png"/></div>
     <div class="notice">支付失败</div>
     <div class="intro">{{reason}}</div>
-    <div class="repay">重新付款</div>
+    <div class="repay" @click.stop.prevent="rePay">重新付款</div>
     <div class="close">关闭</div>
   </div>
 </template>

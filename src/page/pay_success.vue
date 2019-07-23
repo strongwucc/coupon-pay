@@ -10,11 +10,12 @@
     <div class="line"></div>
     <div class="tab order"><span class="label">订单编号</span><span class="txt">{{order.order_id}}</span></div>
     <div class="tab trans-time"><span class="label">交易时间</span><span class="txt">{{order.trans_time | toDate}}</span></div>
-    <div class="close">关闭</div>
+    <div class="close" @click.stop.prevent="rePay">关闭</div>
   </div>
 </template>
 
 <script>
+import { getStore } from '../utils/storge'
 export default {
   name: 'pay_success',
   components: {},
@@ -57,6 +58,10 @@ export default {
           return true
         }
       })
+    },
+    rePay () {
+      let storeBn = getStore('storeBn')
+      this.$router.push({'path': '/pay/' + storeBn})
     }
   }
 }

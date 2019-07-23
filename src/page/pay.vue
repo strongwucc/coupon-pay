@@ -95,6 +95,7 @@ import BScroll from 'better-scroll'
 import { getRect } from '../../src/assets/js/dom'
 import { LoadMore } from 'vux'
 import { getBaseUrl } from '../config/env'
+import { setStore } from '../utils/storge'
 export default {
   name: 'pay',
   components: {LoadMore},
@@ -234,6 +235,7 @@ export default {
       // 从接口获取
       this.$http.post(this.API.getStoreInfo, {storeBn: this.store_bn}).then(result => {
         if (result.return_code === '0000') {
+          setStore('storeBn', this.store_bn)
           if (result.data.openId === '') {
             window.location.href = getBaseUrl + 'index.php/openapi/promotion_offapi/authorize?storeBn=' + this.store_bn
             return false

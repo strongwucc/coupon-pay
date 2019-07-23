@@ -3,12 +3,17 @@
     <div class="invalid-icon"><img src="../assets/img/pay_invalid/icon_jiaoyi_wuxiao@2x.png"/></div>
     <div class="notice">无效订单</div>
     <div class="intro">未使用邮政储蓄银行信用卡支付，不能参与优惠活动，已使用的优惠券及支付金额将原路径退回，请注意查收。</div>
-    <div class="repay">重新付款</div>
-    <div class="close">关闭</div>
+    <div class="order">
+      <span class="label">订单编号</span>
+      <span class="txt">{{orderId}}</span>
+    </div>
+    <div class="repay" @click.stop.prevent="rePay">重新付款</div>
+    <div class="close" @click.stop.prevent="rePay">关闭</div>
   </div>
 </template>
 
 <script>
+import { getStore } from '../utils/storge'
 export default {
   name: 'pay_invalid',
   components: {},
@@ -32,6 +37,10 @@ export default {
   destroyed () {
   },
   methods: {
+    rePay () {
+      let storeBn = getStore('storeBn')
+      this.$router.push({'path': '/pay/' + storeBn})
+    }
   }
 }
 </script>
@@ -74,6 +83,19 @@ export default {
       font-size:13px;
       font-weight:400;
       color:rgba(102,102,102,1);
+    }
+    .order {
+      display: flex;
+      justify-content: space-between;
+      font-size:13px;
+      font-weight:400;
+      color:rgba(153,153,153,1);
+      .txt {
+        color:rgba(51,51,51,1);
+      }
+      margin: 25px 15px 0;
+      border-top: .5px solid rgba(229,229,229,1);
+      padding-top: 20px;
     }
     .repay {
       position: fixed;
