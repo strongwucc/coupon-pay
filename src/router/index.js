@@ -7,6 +7,7 @@ const PaySuccess = r => require.ensure([], () => r(require('@/page/pay_success')
 const PayInvalid = r => require.ensure([], () => r(require('@/page/pay_invalid')), 'pay_invalid') // 付款无效
 const PayFail = r => require.ensure([], () => r(require('@/page/pay_fail')), 'pay_fail') // 付款失败
 const WeChat = r => require.ensure([], () => r(require('@/page/wechat')), 'wechat') // 微信授权
+const Demo = r => require.ensure([], () => r(require('@/page/demo')), 'demo') // 示例
 
 Vue.use(Router)
 
@@ -77,5 +78,15 @@ export default new Router({
         title: '微信授权'
       }
     }
+
+    // {
+    //   path: '/demo',
+    //   name: 'demo',
+    //   component: Demo,
+    //   meta: {
+    //     auth: 0,
+    //     title: '示例'
+    //   }
+    // }
   ]
 })

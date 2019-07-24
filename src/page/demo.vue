@@ -1,6 +1,5 @@
 <template>
   <div class="center-page">
-    center
   </div>
 </template>
 
@@ -44,6 +43,6 @@ export default {
   }
   .center-page {
     height: 100%;
-    background:rgba(246,246,246,1);
+    background:rgba(255,255,255,1);
   }
 </style>

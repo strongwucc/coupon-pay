@@ -279,6 +279,9 @@ export default {
       this.total_amount = this.total_amount.substring(0, this.total_amount.length - 1)
     },
     decimal () {
+      if (this.total_amount.length >= 10) {
+        return false
+      }
       if (this.total_amount === '') {
         this.total_amount = '0.'
       }
@@ -295,6 +298,9 @@ export default {
       this.total_amount = this.total_amount + '.'
     },
     zero () {
+      if (this.total_amount.length >= 10) {
+        return false
+      }
       if (this.total_amount === '') {
         this.total_amount = '0'
         return true
@@ -312,6 +318,9 @@ export default {
       this.total_amount = this.total_amount + '0'
     },
     doubleZero () {
+      if (this.total_amount.length >= 10) {
+        return false
+      }
       if (this.total_amount === '') {
         return false
       }
@@ -475,20 +484,20 @@ export default {
       .money-value {
         text-align: left;
         position: relative;
-        /*height: 35px;*/
-        width: 100%;
+        height: 76px;
+        /*width: 100%;*/
       }
-      /*.money-value:after {*/
-        /*position: absolute;*/
-        /*content: '';*/
-        /*background-color: rgba(89,175,52,1);*/
-        /*top: 0px;*/
-        /*left: 0;*/
-        /*width:1px;*/
-        /*height:35px;*/
-        /*animation:myopacity .8s infinite;*/
-        /*-webkit-animation:myopacity .8s infinite;*/
-      /*}*/
+      .money-value:after {
+        position: absolute;
+        content: '';
+        background-color: rgba(89,175,52,1);
+        top: 20px;
+        right: -2px;
+        width:1px;
+        height:37px;
+        animation:myopacity .8s infinite;
+        -webkit-animation:myopacity .8s infinite;
+      }
     }
     .coupon-tab {
       margin: 6px 20px 0;

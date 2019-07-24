@@ -55,6 +55,7 @@ export default {
           this.order.total_amount = result.data.total_amount
           this.order.discount = result.data.pmt_order
           this.order.trans_time = result.data.last_modified
+          this.order.merchant = result.data.store_name
           return true
         }
       })
