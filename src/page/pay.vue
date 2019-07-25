@@ -273,6 +273,9 @@ export default {
       if (this.total_amount.length >= 10) {
         return false
       }
+      if (/\.\d{2,}/.test(this.total_amount)) {
+        return false
+      }
       this.total_amount = this.total_amount + number
     },
     revoke () {
@@ -301,6 +304,9 @@ export default {
       if (this.total_amount.length >= 10) {
         return false
       }
+      if (/\.\d{2,}/.test(this.total_amount)) {
+        return false
+      }
       if (this.total_amount === '') {
         this.total_amount = '0'
         return true
@@ -319,6 +325,9 @@ export default {
     },
     doubleZero () {
       if (this.total_amount.length >= 10) {
+        return false
+      }
+      if (/\.\d+/.test(this.total_amount)) {
         return false
       }
       if (this.total_amount === '') {
@@ -394,7 +403,12 @@ export default {
       this.$http.post(this.API.createOrder, {amount: totalAmount, code: code, storeBn: this.store_bn}).then(res => {
         this.$vux.loading.hide()
         if (res.return_code === '0000') {
-          window.location.href = res.data.pay_url
+          if (res.data.pay_status === '0') {
+            window.location.href = res.data.pay_url
+          } else {
+            this.$router.push({'path': '/pay_success/' + res.data.order_id})
+          }
+          return true
         } else {
           this.$vux.toast.show({
             type: 'text',

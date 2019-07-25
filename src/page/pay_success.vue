@@ -2,7 +2,7 @@
   <div class="pay-success-page">
     <div class="success-icon"><img src="../assets/img/pay_success/icon_jiaoyi_success@2x.png"/></div>
     <div class="notice">支付成功</div>
-    <div class="payed">￥{{order.total_amount - order.discount | formatMoney(2)}}</div>
+    <div class="payed">￥{{order.total_amount - order.discount > 0 ? order.total_amount - order.discount : 0 | formatMoney(2)}}</div>
     <div class="line"></div>
     <div class="tab merchant"><span class="label">收款方</span><span class="txt">{{order.merchant}}</span></div>
     <div class="tab total-amount"><span class="label">订单金额</span><span class="txt">￥{{order.total_amount | formatMoney(2)}}</span></div>
