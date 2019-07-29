@@ -29,15 +29,15 @@
       <div class="key" @click.stop.prevent="num('4')">4</div>
       <div class="key" @click.stop.prevent="num('5')">5</div>
       <div class="key" @click.stop.prevent="num('6')">6</div>
-      <div class="key pay confirm-empty" :class="{'active': total_amount !== ''}" @click.stop.prevent="goPay"></div>
+      <div class="key pay confirm-empty" :class="{'active': final_amount > 0}" @click.stop.prevent="goPay"></div>
       <div class="key" @click.stop.prevent="num('7')">7</div>
       <div class="key" @click.stop.prevent="num('8')">8</div>
       <div class="key" @click.stop.prevent="num('9')">9</div>
-      <div class="key pay confirm-pay" :class="{'active': total_amount !== ''}" @click.stop.prevent="goPay"><span>确认</span><span>付款</span></div>
+      <div class="key pay confirm-pay" :class="{'active': final_amount > 0}" @click.stop.prevent="goPay"><span>确认</span><span>付款</span></div>
       <div class="key" @click.stop.prevent="decimal">.</div>
       <div class="key" @click.stop.prevent="zero">0</div>
       <div class="key" @click.stop.prevent="doubleZero">00</div>
-      <div class="key pay confirm-empty" :class="{'active': total_amount !== ''}" @click.stop.prevent="goPay"></div>
+      <div class="key pay confirm-empty" :class="{'active': final_amount > 0}" @click.stop.prevent="goPay"></div>
     </div>
     <div class="mask" v-show="visible" @click.stop.prevent="visible = false"></div>
     <transition name="slide">
@@ -210,7 +210,7 @@ export default {
       let discountAmount = isNaN(parseFloat(this.discount_amount)) ? 0.00 : parseFloat(this.discount_amount)
       let finalAmount = this.NP.minus(totalAmount, discountAmount)
 
-      return finalAmount >= 0 ? finalAmount : 0
+      return finalAmount >= 0 ? this.NP.round(finalAmount, 2) : 0
     }
   },
   watch: {
@@ -373,7 +373,7 @@ export default {
         return false
       }
       if (coupon.card_type === 'DISCOUNT') {
-        this.discount_amount = this.NP.times(totalAmount, this.NP.divide(coupon.discount, 100))
+        this.discount_amount = this.NP.round(this.NP.times(totalAmount, this.NP.divide(coupon.discount, 100)), 2)
       } else {
         if (coupon.least_cost > 0 && coupon.least_cost > totalAmount) {
           this.discount_amount = ''
@@ -397,6 +397,9 @@ export default {
       return true
     },
     goPay () {
+      if (this.final_amount <= 0) {
+        return false
+      }
       let totalAmount = isNaN(parseFloat(this.total_amount)) ? 0.00 : parseFloat(this.total_amount)
       let code = this.checkedIndex >= 0 && this.coupons[this.checkedIndex] ? this.coupons[this.checkedIndex].qrcode : ''
       this.$vux.loading.show({})
@@ -499,6 +502,7 @@ export default {
         text-align: left;
         position: relative;
         height: 76px;
+        line-height: 76px;
         /*width: 100%;*/
       }
       .money-value:after {
