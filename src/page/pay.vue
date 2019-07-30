@@ -346,6 +346,9 @@ export default {
       this.total_amount = this.total_amount + '00'
     },
     showCoupons () {
+      if (this.coupons.length === 0) {
+        return false
+      }
       this.visible = true
       this.$nextTick(() => {
         this.initScroll()
@@ -413,9 +416,10 @@ export default {
           }
           return true
         } else {
+          let errorInfo = res.return_msg ? res.return_msg : '哎呀，付款出错啦！'
           this.$vux.toast.show({
             type: 'text',
-            text: '<span style="font-size: 14px;padding: 0 10px">哎呀，付款出错啦！</span>',
+            text: '<span style="font-size: 14px;padding: 0 10px">' + errorInfo + '</span>',
             position: 'middle'
           })
           return false
